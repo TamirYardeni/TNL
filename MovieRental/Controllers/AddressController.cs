@@ -94,7 +94,7 @@ namespace MovieRental.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="ID,Adress")] Address address)
+        public ActionResult Edit([Bind(Include= "ID,AddressStore")] Address address)
         {
             if (ModelState.IsValid)
             {
