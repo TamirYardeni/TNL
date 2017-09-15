@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MovieRental.Models.Order>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $("button").click(function ()
+            {
+                var id = $(this).attr('name');
+                var deleteDiv = $("#deleteDiv");
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl("ReturnOrder"))",
+                    data: { "id": id },
+                    success: function (data)
+                    {
+                        deleteDiv.html('');
+                        deleteDiv.html(data);
+                        deleteDiv.show();
+                        deleteDiv.dialog(({ dialogClass: 'no-close-dialog' }));
+                    },
+                    error: function (xhr, ajaxOptions, thrownError)
+                    {
+                        alert('Failed to retrieve.');                    
+                    }
+                });
+            });
+        }); 
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        <p>
+            Find by title: @Html.TextBox("title")
+            username: @Html.TextBox("username")
+            not returned: @Html.CheckBox("notReturned",false)
+            <input type="submit" class="btn btn-primary btn-sm" value="Search" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnDate)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id="@item.OrderId">
+            <td>
+                @Html.DisplayFor(modelItem => item.Movie.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <td>
+                @if (item.ReturnDate == null)
+                {
+                    <button id="return" class="btn btn-warning btn-sm" name="@item.OrderId">Return</button>
+                }
+            </td>
+
+        </tr>
+    }
+    </table>
+    <div id="deleteDiv"></div>
+</body>
+</html>

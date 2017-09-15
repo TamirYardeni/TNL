@@ -1,0 +1,108 @@
+﻿@model IEnumerable<MovieRental.Models.Movie>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("button").click(function () {
+            if ('@HttpContext.Current.Session["LoggedUserId"]' == "") {
+                window.location.href = "/Home/Login";
+            } else {
+                var id = $(this).attr('name');
+                var orderDiv = $("#orderDiv");
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl("OrderMovie"))",
+                    data: { "id": id },
+                    success: function (data) {
+                        orderDiv.html('');
+                        orderDiv.html(data);
+                        orderDiv.show();
+                        orderDiv.dialog(({ dialogClass: 'no-close-dialog' }));
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</head>
+<body>
+    @if (Session["IsManagerLogged"] == true.ToString())
+    {
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    }
+    @using (Html.BeginForm())
+    {
+        <p>
+            Find by title: @Html.TextBox("title")
+            director: @Html.TextBox("director")
+            max price: @Html.TextBox("price",100,new { type="number", min="0", max="100" })
+            <input type="submit" class="btn btn-primary btn-sm" value="Search" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Director)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @if (Session["IsManagerLogged"] == true.ToString())
+                {
+                    <span>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.MovieId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.MovieId }) |
+                    </span>
+                }
+                @Html.ActionLink("Details", "Details", new { id=item.MovieId }) |
+                <button class="btn btn-success btn-sm" name="@item.MovieId">Order</button>
+            </td>
+        </tr>
+    }
+    </table>
+    <div id="orderDiv"></div>
+</body>
+</html>

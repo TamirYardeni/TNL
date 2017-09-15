@@ -1,0 +1,20 @@
+﻿using System.Data.Entity;
+
+namespace MovieRental.Models
+{
+    public class MovieDBContext : DbContext
+    {
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+
+        public MovieDBContext()
+            : base("DefaultConnection")
+        {
+            //Database.SetInitializer<MovieDBContext>(new DropCreateDatabaseAlways<MovieDBContext>());
+            Database.SetInitializer<MovieDBContext>(null);
+        }
+    }
+}
