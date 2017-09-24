@@ -29,6 +29,11 @@ namespace MovieRental.Controllers
             return View();
         }
 
+        public ActionResult ReportOrdersByGenre()
+        {
+            return View();
+        }
+
 
         [AllowAnonymous]
         public ActionResult Login()
