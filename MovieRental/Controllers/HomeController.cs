@@ -26,14 +26,30 @@ namespace MovieRental.Controllers
 
         public ActionResult Report()
         {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
         public ActionResult ReportOrdersByGenre()
         {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
+        public ActionResult ReportOrdersByDate()
+        {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            return View();
+        }
 
         [AllowAnonymous]
         public ActionResult Login()

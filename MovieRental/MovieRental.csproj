@@ -243,7 +243,10 @@
     <Content Include="Views\Address\Edit.cshtml" />
     <Content Include="Views\Address\Index.cshtml" />
     <Content Include="Views\Home\Report.cshtml" />
-    <Content Include="Views\Twitter\Index.cshtml" />    <Content Include="Views\Home\data.tsv" />    <Content Include="Views\Home\ReportOrdersByGenre.cshtml" />    <None Include="Web.Debug.config">
+    <Content Include="Views\Twitter\Index.cshtml" />
+    <Content Include="Views\Home\ReportOrdersByGenre.cshtml" />
+    <Content Include="Views\Home\ReportOrdersByDate.cshtml" />
+    <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">

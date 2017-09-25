@@ -63,6 +63,10 @@ namespace MovieRental.Controllers
         // GET: /Users/Create
         public ActionResult Create()
         {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
@@ -73,6 +77,10 @@ namespace MovieRental.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="ID,FirstName,LastName,BirthDate,Email,Username,Password,IsManager")] User user)
         {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);
@@ -109,6 +117,10 @@ namespace MovieRental.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="ID,FirstName,LastName,BirthDate,Email,Username,Password,IsManager")] User user)
         {
+            if (Session["LoggedUserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(user).State = EntityState.Modified;

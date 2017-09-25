@@ -10,22 +10,20 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var movie = @Html.Raw(Json.Encode(Model.Title))
-            $.getJSON("http://www.omdbapi.com/?t=" + movie + "&tomatoes=true&type=movie", function (json) {
-                $("#review").html("Movie not found");
-                if (json["Response"] == "True") {
-                    $("#review").html(
-                        "IMDB Rating - " + json["imdbRating"] + "<br>" +
-                        "IMDB Votes - " + json["imdbVotes"] + "<br>" +
-                        "TomatoMeter - " + json["tomatoMeter"] + "%<br>" +
-                        "Tomato Avg Rate - " + json["tomatoRating"] + "/10<br>" +
-                        "Tomato Fresh/Rotten - " + json["tomatoFresh"] + "/" + json["tomatoRotten"] + "<br>" +
-                        "Tomato User Meter - " + json["tomatoUserMeter"] + "%<br>" +
-                        "Tomato User Avg Rate - " + json["tomatoUserRating"] + "/5<br>" +
-                        "Tomato User Revies Count - " + json["tomatoUserReviews"] + "<br>" +
-                        "Tomato Desc - " + json["tomatoConsensus"]
-                    );
-                }
-            });
+
+
+
+                
+                 $.getJSON("http://api.myapifilms.com/imdb/idIMDB?title=" + movie + "&token=b0c1c67f-0581-4c20-a833-c527483f1a67&callback=?", function (json) {
+                     $("#review").html("Movie not found");
+                     if (json.data != undefined) {
+                         $("#review").html(
+                             "IMDB Rating - " + json.data.movies[0].rating + "<br>" +
+                             "IMDB Votes - " + json.data.movies[0].votes + "<br>"
+                         );
+                     }
+                     
+                 });
         });
     </script>
 </head>
