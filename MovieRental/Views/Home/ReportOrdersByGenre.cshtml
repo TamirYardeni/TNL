@@ -11,13 +11,13 @@
 </head>
 <body>
     <h3>Report - Orders By Genre</h3>
-    <svg width="960" height="500"></svg>
+    <svg width="960" height="300"></svg>
     <div id="colorMap"/>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="../Scripts/Donut3D.js"></script>
     <script>
         $.ajax({
-            url: "../Movies/GetTSV",
+            url: "../Movies/GetOrdersByGenre",
             success: function (data) {
                 this.genresData = [];
                 for (var i = 0; i < data.length; i++) {
@@ -46,7 +46,7 @@
                     name.innerText = this.genresData[i].label;
                     var color = document.createElement("td");
                     color.style.backgroundColor = this.genresData[i].color;
-                    color.innerHTML = "&nbsp;";
+                    color.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                     tr.appendChild(name);
                     tr.appendChild(color);
                     table.appendChild(tr);
