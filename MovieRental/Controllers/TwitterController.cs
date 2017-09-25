@@ -9,6 +9,13 @@ namespace MovieRental.Controllers
 {
     public class TwitterController : Controller
     {
+        private static string key = "8Y1wwVPxhbyIICQ73JlsWZzu8";
+        private static string secret = "aYSjGVY5J0mHCCWxqFwSTpVobq2Ro9PbtAVKOfw4bCSnivwvHg";
+        private static string access_token = "910513747399266304-oSbBPqz4naZT2cEetLG7V7CvDFfO2YV";
+        private static string access_token_secret = "XQMfF6pfgTLKXFnq4QBkKfPEqQjuOANbnERDmTSAM8TrQ";
+
+        TwitterService service = new TwitterService(key, secret, access_token, access_token_secret);
+
         // GET: Twitter
         public ActionResult Index()
         {
@@ -18,14 +25,8 @@ namespace MovieRental.Controllers
         public ActionResult TwitterCallback(string oauth_token, string oauth_verifier)
         {
             var requesttoken = new OAuthRequestToken { Token = oauth_token };
-            string key = "8Y1wwVPxhbyIICQ73JlsWZzu8";
-            string secret = "aYSjGVY5J0mHCCWxqFwSTpVobq2Ro9PbtAVKOfw4bCSnivwvHg";
-
             try
             {
-                TwitterService service = new TwitterService(key, secret);
-                OAuthAccessToken acessToken = service.GetAccessToken(requesttoken, oauth_verifier);
-                service.AuthenticateWith(acessToken.Token, acessToken.TokenSecret);
                 VerifyCredentialsOptions option = new VerifyCredentialsOptions();
                 TwitterUser user = service.VerifyCredentials(option);
 
@@ -42,13 +43,22 @@ namespace MovieRental.Controllers
 
         public ActionResult TwitterAuth()
         {
-            string key = "8Y1wwVPxhbyIICQ73JlsWZzu8";
-            string secret = "aYSjGVY5J0mHCCWxqFwSTpVobq2Ro9PbtAVKOfw4bCSnivwvHg";
-            TwitterService service = new TwitterService(key, secret);
             OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:14623/Twitter/TwitterCallback");
             Uri uri = service.GetAuthenticationUrl(requestToken);
 
             return Redirect(uri.ToString());
+        }
+
+        public ActionResult TwitterPost(string TeewtText)
+        {
+            service.SendTweet(new SendTweetOptions { Status = TeewtText } , (tweet, response) => { });
+
+            TwitterUser user = service.VerifyCredentials(new VerifyCredentialsOptions());
+
+            TempData["Name"] = user.Name;
+            TempData["userpic"] = user.ProfileImageUrl;
+
+            return Redirect("http://localhost:14623/Twitter");
         }
     }
 }

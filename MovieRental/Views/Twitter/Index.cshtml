@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        <img style="width:100px;height:100px;" src="@TempData["userpic"]" />
+        <h1>@TempData["Name"] Twitter Account</h1>
+        <br/>
+        <p>Write a new Tweet!</p>
+        <textarea id="myTextarea" rows="4" cols="50"></textarea>
+        <div>
+            @using (Html.BeginForm("TwitterPost", "Twitter", FormMethod.Post))
+            {
+                <button type="submit"> Tweet!</button>
+            }
+        </div>
+        <text hidden>Successfully Sent!</text>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var TValue = $("#myTextarea").val();
+                $.ajax({
+                    url: '/Twitter/TwitterPost',
+                    data: { TeewtText: TValue }
+                });
+                $("#myTextarea").val("");
+                $("text").show();
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(myTextarea).click(function() {
+                $("text").hide();
+            });
+    </script>
+</body>
+</html>
