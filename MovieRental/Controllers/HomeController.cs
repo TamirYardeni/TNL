@@ -16,7 +16,7 @@ namespace MovieRental.Controllers
             return View();
         }
 
-        
+
         public ActionResult GenreMenu()
         {
             var genres = db.Genres.ToList();
@@ -25,6 +25,11 @@ namespace MovieRental.Controllers
         }
 
         public ActionResult Report()
+        {
+            return View();
+        }
+
+        public ActionResult ReportOrdersByGenre()
         {
             return View();
         }
@@ -57,6 +62,7 @@ namespace MovieRental.Controllers
                     Session["LoggedUserId"] = v.ID.ToString();
                     Session["LoggedUserName"] = v.Username;
                     Session["IsManagerLogged"] = v.IsManager.ToString();
+
                     return RedirectToAction("Index");
                 }
                 ViewBag.Message = "Wrong Username or Password";

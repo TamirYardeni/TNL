@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MovieRental.Models;
 using System.IO;
+using System.Web.Hosting;
 
 namespace MovieRental.Controllers
 {
@@ -193,5 +194,64 @@ namespace MovieRental.Controllers
             }
             base.Dispose(disposing);
         }
+
+        [HttpGet]
+        public ActionResult GetTSV()
+        {
+            var ordersToGenre  = from orders in db.Orders
+            join movies in db.Movies on orders.MovieId equals movies.MovieId
+            group movies by movies.GenreId into g
+            join genres in db.Genres on g.Key equals genres.GenreId
+            select new {
+                g.Key,
+                Count = g.Count(t => t.GenreId != null),
+                genres.Name
+            };
+            var jsn = Json(ordersToGenre, JsonRequestBehavior.AllowGet);
+            return jsn;
+        }
+
+//        [HttpGet]
+//        public ActionResult GetTSV()
+//        {
+//            var ordersInDate = 
+//                from orders in db.Orders
+//                    from ordersDate in db.Orders
+//                        select new {
+//                            orders.Count(t => t != null)
+//                        }
+//                        where orders.OrderDate.Equals(ordersDate.OrderDate)
+//                        select new{
+
+//                        }
+//                        select new{
+//                            orders.OrderDate,
+//                            Count = g.Count(t => t.GenreId != null)
+//                        }
+                
+
+//                select distinct( cast(kaki.OrderDate as varchar(12))) , 
+//                    (select count(*) from TamirDB.dbo.Orders pipi where cast(kaki.OrderDate as varchar(12)) =
+//                        cast(pipi.OrderDate as varchar(12))) 
+//from TamirDB.dbo.Orders kaki
+
+
+
+//                תאריך| כמות סרטים שהוזמנו
+                
+                
+//                //from orders in db.Orders
+//                //                join movies in db.Movies on orders.MovieId equals movies.MovieId
+//                //                group movies by movies.GenreId into g
+//                //                join genres in db.Genres on g.Key equals genres.GenreId
+//                //                select new
+//                //                {
+//                //                    g.Key,
+//                //                    Count = g.Count(t => t.GenreId != null),
+//                //                    genres.Name
+//                //                };
+//            var jsn = Json(ordersInDate, JsonRequestBehavior.AllowGet);
+//            return jsn;
+//        }
     }
 }

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "ReportOrdersByGenre";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <title>Report</title>
+    <script src="../Scripts/jquery-2.1.4.js"
+            type="text/javascript"></script>
+</head>
+<body>
+    <h3>Report - Orders By Genre</h3>
+    <svg width="960" height="500"></svg>
+    <div id="colorMap"/>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="../Scripts/Donut3D.js"></script>
+    <script>
+        $.ajax({
+            url: "../Movies/GetTSV",
+            success: function (data) {
+                this.genresData = [];
+                for (var i = 0; i < data.length; i++) {
+                    colorGenre = { label: data[i].Name, color: "#" + ((1 << 24) * Math.random() | 0).toString(16), index: i, count: data[i].Count };
+                    this.genresData.push(colorGenre);
+                }
+
+                var svg = d3.select("svg");
+
+                svg.append("g").attr("id", "dataDonut");
+
+                Donut3D.draw("dataDonut", randomData(this.genresData), 150, 150, 130, 100, 30, 0.4)
+
+                function randomData(data) {
+                    return data.map(function (d) {
+                        return { label: d.label, value: 1000 * data[d.index].count, color: d.color };
+                    });
+                }
+
+
+                var colorMap = document.getElementById("colorMap");
+                var table = document.createElement("table");
+                for (var i = 0; i < this.genresData.length; i++) {
+                    var tr = document.createElement("tr");
+                    var name = document.createElement("td");
+                    name.innerText = this.genresData[i].label;
+                    var color = document.createElement("td");
+                    color.style.backgroundColor = this.genresData[i].color;
+                    color.innerHTML = "&nbsp;";
+                    tr.appendChild(name);
+                    tr.appendChild(color);
+                    table.appendChild(tr);
+                }
+
+                colorMap.appendChild(table);  
+            }
+        });
+    </script>
+
+
+</body>
+</html>
